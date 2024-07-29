@@ -1,6 +1,6 @@
 import type { GirlType } from "@/types/TalkWithGirl.type";
 import axios from "axios";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const useTalkWithGirl = () => {
   // 女の子別のデータ
@@ -21,6 +21,28 @@ export const useTalkWithGirl = () => {
 
   // ボタンの有効無効
   const [isDisabled, setIsDisabled] = useState(false);
+
+  // iosで音声を流すことが有効か否か
+  const [ableVoiceOutput, setAbleVoiceOutput] = useState(false);
+
+  /**
+   * iosで音声を流せるようにするメソッド.
+   * @description iosは一度音声を流さないと音声が流れない
+   */
+  const enableVoiceOutput = useCallback(() => {
+    var speechSynthesis = window.speechSynthesis;
+    var utterance = new SpeechSynthesisUtterance("");
+    speechSynthesis.speak(utterance);
+    setAbleVoiceOutput(true);
+    window.removeEventListener("touchend", enableVoiceOutput);
+  }, []);
+
+  useEffect(() => {
+    if (!ableVoiceOutput) {
+      // イベントリスナーを登録
+      window.addEventListener("touchend", enableVoiceOutput);
+    }
+  }, [ableVoiceOutput, enableVoiceOutput]);
 
   /**
    * 入力テキストを変数に格納するメソッド.
