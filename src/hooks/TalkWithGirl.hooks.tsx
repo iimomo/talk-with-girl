@@ -31,7 +31,7 @@ export const useTalkWithGirl = () => {
    */
   const enableVoiceOutput = useCallback(() => {
     var speechSynthesis = window.speechSynthesis;
-    var utterance = new SpeechSynthesisUtterance("有効にする");
+    var utterance = new SpeechSynthesisUtterance("");
     speechSynthesis.speak(utterance);
     setAbleVoiceOutput(true);
     window.removeEventListener("touchend", enableVoiceOutput);
